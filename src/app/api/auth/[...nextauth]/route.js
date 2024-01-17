@@ -2,8 +2,8 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { connectMongoDB } from "../../../../../lip/mongodb";
 import User from "@/app/model/userModel";
+import { NextResponse } from "next/server";
 const bcrypt = require('bcrypt');
-
 
 
 export const authOptions = {
@@ -24,12 +24,13 @@ export const authOptions = {
           }
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
-          console.log(passwordsMatch)
+          
           if (!passwordsMatch) {
             return null;
           }
 
-          return user;
+          return user
+          
         } catch (error) {
           console.log("Error: ", error);
         }

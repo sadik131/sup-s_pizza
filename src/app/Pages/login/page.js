@@ -5,13 +5,17 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const route = useRouter()
+
+  useEffect(()=>{
+    setError('')
+  },[email,password])
 
   const handelForm = async (e) => {
     e.preventDefault()
@@ -22,9 +26,7 @@ function Login() {
         setError("Wrong creadinsial")
         return
       }
-
       route.push("/")
-      console.log(res)
     } catch (error) {
       console.log(error)
     }
@@ -36,14 +38,15 @@ function Login() {
       <form onSubmit={handelForm} className='max-w-lg mx-auto text-center'>
         <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' />
         <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Password' />
-        <input type="submit" className='bg-primary border-none text-white' />
+        <input type="submit" className='bg-primary cursor-pointer border-none text-white' />
         <div>
+          {error && <div className='bg-red-500 text-white font-bold rounded-lg'>{error}</div>}
           <h1>or</h1>
-          <button className='border w-full flex items-center justify-center border-gray-500  rounded-xl'>
+          <button className='border w-full cursor-pointer flex items-center justify-center border-gray-500  rounded-xl'>
             <Image src="/google.png" alt='google' height={20} width={40} />
             Google
           </button>
-          <Link className='my-4 underline ' href="/Pages/register">Register</Link>
+          <Link className='my-4 underline cursor-pointer ' href="/Pages/register">Register</Link>
         </div>
       </form>
     </section>

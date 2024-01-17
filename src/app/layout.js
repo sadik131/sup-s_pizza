@@ -14,12 +14,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <main>
-          <Nav></Nav>
-          {/* <AuthProvider> */}
+        <AuthProvider>
+          <main>
+            <Nav></Nav>
             {children}
-          {/* </AuthProvider> */}
-        </main>
+          </main>
+        </AuthProvider>
       </body>
     </html>
   )
