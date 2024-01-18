@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 input[type="text"],
+select,
+option,
 input[type="email"],
 input[type="password"],
 input[type="number"],

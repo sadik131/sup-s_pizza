@@ -4,6 +4,11 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import firebase from "firebase/compat/app"
+import "firebase/compat/storage"
+import { storage } from '../../firebase'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 function Profile() {
   const { data, status } = useSession()
@@ -11,6 +16,7 @@ function Profile() {
   const [name, setName] = useState(data?.user?.name || "")
   const [email, setEmail] = useState(data?.user?.email || "")
   const [number, setNumber] = useState("")
+  const [image, setImage] = useState("")
   const [address, setAddress] = useState("")
   const [street, setStreet] = useState("")
   const [file, setFile] = useState(null)
@@ -51,29 +57,24 @@ function Profile() {
   const handelupload = async (e) => {
     e.preventDefault()
     const file = e.target.files[0]
-
-    if (!file) {
-      return alert("file miss")
-    }
-
-    const data = {
-      email,
-      file
-    }
-    console.log(data)
-
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      console.log(response)
-    } catch (error) {
-      console.log(error)
+    console.log("first", file)
+    if (file) {
+      const storageRef = getStorage(storage);
+      const fileRef = ref(storageRef, file.name);
+  
+      uploadBytes(fileRef, file)
+        .then((snapshot) => {
+          getDownloadURL(snapshot.ref)
+            .then(url => {
+              console.log(url);
+              setImage(url);
+            })
+        })
+        .catch(error => {
+          console.error("Error uploading file: ", error);
+        });
+    } else {
+      alert("File missing");
     }
   }
 

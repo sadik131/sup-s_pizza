@@ -3,12 +3,19 @@ import HeadLink from '@/Components/layout/HeadLink'
 import Left from '@/icon/Left'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function page() {
     const [name, setName] = useState("")
+    const [catagorys, setCatagorys] = useState([])
     const [discription, setDiscription] = useState("")
     const [price, setPrice] = useState("")
+
+console.log(catagorys)
+    // get all catagory
+    useEffect(()=>{
+        fetch("/api/catagory").then(res=>res.json()).then(data=>setCatagorys(data.doc))
+    },[])
     return (
         <main className='main-container'>
             <HeadLink></HeadLink>
@@ -40,6 +47,13 @@ function page() {
                         onChange={(e) => setPrice(e.target.value)}
                         type="number"
                     />
+                    <label className='text-gray-500 block'>Catagory</label>
+                    <select>
+                        {catagorys.map(cat=>(
+                            <option key={cat._id} value={cat.name}>{cat.name}</option>
+                        ))}
+                    </select>
+
                     <button type='submit' className='bg-primary block text-center w-full text-white p-1 rounded-xl'>Save</button>
                 </form>
             </div>
