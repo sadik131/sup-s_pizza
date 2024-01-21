@@ -3,11 +3,14 @@ import HeadLink from '@/Components/layout/HeadLink'
 import Edit from '@/icon/Edit'
 import Trash from '@/icon/Trash'
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 function page() {
     const [name, setName] = useState("")
     const [catagory, setCatagory] = useState([])
     const [edit, setEdit] = useState(false)
+    const [loading, setLoading] = useState(false)
+
 
     // get all catagory
     useEffect(() => {
@@ -15,11 +18,13 @@ function page() {
     }, [])
 
     const getCatagory = async () => {
+        setLoading(true)
         fetch("/api/catagory")
             .then(res => res.json())
             .then(data => {
                 setName("")
                 setCatagory(data.doc)
+                setLoading(false)
             })
     }
 
@@ -28,31 +33,52 @@ function page() {
     const handelForm = async (e) => {
         e.preventDefault()
 
-        const res = await fetch("/api/catagory", {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ name })
+        const catagoryPromis = new Promise(async (resolve, reject) => {
+            const res = await fetch("/api/catagory", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ name })
+            })
+            if (res.ok) {
+                resolve()
+                getCatagory()
+            }
+            else {
+                reject()
+            }
         })
-        if (res.ok) {
-            getCatagory()
-            setName("")
-        }
+
+        await toast.promise(catagoryPromis, {
+            loading: "loading..",
+            success: "Upload catagory",
+            error: "error"
+        })
     }
 
     // delete for catagory
-    const deleteCatagory = (id) => {
-        console.log(edit)
-        fetch("/api/catagory", {
-            method: "DELETE",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ id })
+    const deleteCatagory = async(id) => {
+        const deletePromis = new Promise((resolve, reject)=>{
+            fetch("/api/catagory", {
+                method: "DELETE",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ id })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status){
+                        resolve()
+                        getCatagory()
+                    }
+                    else reject()
+                }
+                ) 
         })
-            .then(res => res.json())
-            .then(data => {
-                alert("delete")
-                getCatagory()
-            }
-            )
+        await toast.promise(deletePromis,{
+            loading:"Loading..",
+            success:"Deleted",
+            error:"error"
+        })
+        
     }
 
     // edit catagory
@@ -76,6 +102,7 @@ function page() {
     return (
         <main className='main-container'>
             <HeadLink></HeadLink>
+            {loading && <h1>Loading...</h1>}
             <div>
                 <label>{edit ? `Update catagory name: ${name}` : `New catagory name`}</label>
                 <form onSubmit={handelForm} className='flex gap-3 items-center'>

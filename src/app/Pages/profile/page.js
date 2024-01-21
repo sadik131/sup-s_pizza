@@ -4,10 +4,9 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import firebase from "firebase/compat/app"
-import "firebase/compat/storage"
-import { storage } from '../../firebase'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { storage } from '@/app/firebase'
+import toast from 'react-hot-toast'
 
 
 function Profile() {
@@ -16,10 +15,10 @@ function Profile() {
   const [name, setName] = useState(data?.user?.name || "")
   const [email, setEmail] = useState(data?.user?.email || "")
   const [number, setNumber] = useState("")
-  const [image, setImage] = useState("")
   const [address, setAddress] = useState("")
   const [street, setStreet] = useState("")
-  const [file, setFile] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [img, setImg] = useState("")
   const [post, setPost] = useState("")
   const [country, setCountry] = useState("")
 
@@ -31,7 +30,27 @@ function Profile() {
   useEffect(() => {
     setName(data?.user?.name)
     setEmail(data?.user?.email)
+
   }, [data])
+
+  useEffect(() => {
+    setLoading(true)
+    fetch("/api/profile")
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.user.userImag)
+        setName(data.user.name)
+        setNumber(data.user.number)
+        setAddress(data.user.address)
+        setStreet(data.user.street)
+        setPost(data.user.post)
+        setCountry(data.user.country)
+        setImg(data.user.userImag)
+        setLoading(false)
+      })
+
+  }, [email])
+
 
 
   // update profile
@@ -40,16 +59,28 @@ function Profile() {
     const data = {
       name, number, address, street, post, country, email
     }
-    const res = await fetch("http://localhost:3000/api/profile", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data)
+    const uploadPromis = new Promise(async (resolve, reject) => {
+      fetch("http://localhost:3000/api/profile", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          if(!!data.status){
+            resolve()
+          }
+          else{
+            reject()
+          }
+        })
     })
-    console.log(res)
-    if (res.status === 200) {
-      alert("successfull")
-    }
-
+    await toast.promise(uploadPromis,{
+      loading:"Saveing..",
+      success:"Profile saved!",
+      error:"error"
+    })
   }
 
 
@@ -57,34 +88,41 @@ function Profile() {
   const handelupload = async (e) => {
     e.preventDefault()
     const file = e.target.files[0]
-    console.log("first", file)
     if (file) {
-      const storageRef = getStorage(storage);
-      const fileRef = ref(storageRef, file.name);
-  
-      uploadBytes(fileRef, file)
-        .then((snapshot) => {
-          getDownloadURL(snapshot.ref)
-            .then(url => {
-              console.log(url);
-              setImage(url);
+      const fileRef = ref(storage, 'images/' + file.name);
+      uploadBytes(fileRef, file).then((data) => {
+        getDownloadURL(data.ref)
+          .then(url => {
+            setImg(url)
+            const imageUrl = {
+              email, userImag: url
+            }
+            fetch("/api/profile", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(imageUrl)
             })
-        })
-        .catch(error => {
-          console.error("Error uploading file: ", error);
-        });
+              .then(res => res.json())
+              .then(data => console.log(data, "success"))
+
+          })
+      })
+
     } else {
       alert("File missing");
     }
   }
 
+
+
   return (
     <main className='main-container'>
       <HeadLink></HeadLink>
+      {loading && <h1 className='font-bold '>Loading... user Info</h1>}
       <h1 className='text-primary text-center text-2xl font-bold'>Profile</h1>
       <div className='flex my-5 gap-5'>
         <div>
-          <Image src={"/user.jpg"} height={120} width={100} alt='user' className='rounded-xl' />
+          <img src={img ? img : "/user.jpg"} alt='user' className='rounded-xl h-20 w-28' />
           <label>
             <input type="file" className='hidden' onChange={handelupload} />
             <span className='border block text-center w-full mt-1 border-gray-400 rounded-lg'>Edit</span>
@@ -94,24 +132,29 @@ function Profile() {
           <input type="text" value={name || ""} onChange={(e) => setName(e.target.value)} />
           <input type="email" disabled value={email || ""} />
           <input
+            value={number}
             onChange={(e) => setNumber(e.target.value)}
             type="number"
             placeholder='Phon number' />
           <input
+            value={address}
             onChange={(e) => setAddress(e.target.value)}
             type="text"
             placeholder='address' />
           <div className='flex gap-3'>
             <input
+              value={street}
               onChange={(e) => setStreet(e.target.value)}
               type="text"
               placeholder='street' />
             <input
+              value={post}
               onChange={(e) => setPost(e.target.value)}
               type="text"
               placeholder='postCode' />
           </div>
           <input
+            value={country}
             onChange={(e) => setCountry(e.target.value)}
             type="text"
             placeholder='country' />
