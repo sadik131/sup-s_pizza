@@ -1,3 +1,5 @@
+import User from "@/app/model/userModel"
+
 // GET ALL THE USER
 export async function GET(req) {
     try {

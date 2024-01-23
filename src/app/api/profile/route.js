@@ -24,9 +24,9 @@ export async function POST(req) {
 // GET THE USER BY EMAIL
 export async function GET(req) {
     try {
+        await connectMongoDB()
         const session = await getServerSession(authOptions)
         const user = await User.findOne({ email: session?.user?.email })
-        console.log(user)
         return NextResponse.json({
             message: "find",
             user
