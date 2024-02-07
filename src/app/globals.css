@@ -9,7 +9,7 @@ input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="submit"]{
-    @apply block border bg-gray-100  border-gray-500 w-full my-2 py-2 rounded-2xl px-1
+    @apply block border bg-gray-100 text-black border-gray-500 w-full my-2 py-2 rounded-2xl px-1
 }
 
 input[type="text"]:disabled,
@@ -24,7 +24,7 @@ input[type="submit"]:disabled{
 }
 
 .main-container{
-    @apply max-w-sm mx-auto flex flex-col
+    @apply max-w-2xl mx-auto flex flex-col
 }
 
 .active{

@@ -7,7 +7,6 @@ import { authOptions } from "../auth/[...nextauth]/route"
 // UPDATE INFO OF USER
 export async function POST(req) {
     const data = await req.json()
-    console.log(data)
     const email = data.email
     try {
         await connectMongoDB()
@@ -44,7 +43,6 @@ export async function PUT(req) {
     const id = await req.json()
     try {
         const user = await User.updateOne({ _id: id }, { isAdmin: true }, { upsert: true })
-        console.log(user)
         return NextResponse.json({
             message: "okk", user
         })
@@ -59,7 +57,6 @@ export async function DELETE(req) {
     const id = await req.json()
     try {
         const user = await User.deleteOne({ _id: id })
-        console.log(user)
         return NextResponse.json({
             message: "okk", user
         })

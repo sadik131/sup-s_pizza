@@ -25,9 +25,9 @@ function Hero() {
                         }></Button>
                 </div>
             </div>
-            <div className=' relative'>
-                <Image src={"/pizza.png"} alt='pizza' layout={"fill"} objectFit={"containe"} />
-            </div>
+            {/* <div className=' relative'> */}
+                <Image src={"/pizza.png"} className='object-contain h-full w-2/3' alt='pizza' height={200} width={200} />
+            {/* </div> */}
         </section>
     )
 }

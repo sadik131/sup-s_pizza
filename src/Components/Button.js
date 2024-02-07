@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Button({title,svg,varient}) {
+function Button({title,svg,varient ,...rest}) {
   return (
-    <div className={`py-2 flex items-center rounded-2xl cursor-pointer px-4 ${varient}`}>{title}{svg}</div>
+    <button {...rest} className={`py-2 flex items-center rounded-2xl cursor-pointer px-4 ${varient}`}>{title}{svg}</button>
   )
 }
 

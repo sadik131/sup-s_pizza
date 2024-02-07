@@ -14,6 +14,7 @@ function page() {
     const [discription, setDiscription] = useState("")
     const [price, setPrice] = useState("")
     const [image, setImage] = useState("")
+    const [catagory, setCatagory] = useState("")
 
 
     // get all items
@@ -25,7 +26,6 @@ function page() {
     const uploadFile = (e) =>{
         e.preventDefault()
         const file = e.target.files[0]
-        console.log(file)
         const fileRef = ref(storage, 'images/' + file.name);
         uploadBytes(fileRef,file).then((data) =>{
             getDownloadURL(data.ref)
@@ -42,7 +42,8 @@ function page() {
             name,
             discription,
             price,
-            image
+            image,
+            catagory
         }
         const uploadPromis = new Promise((resolve,reject)=>{
             fetch("/api/uploadItem",{
@@ -52,9 +53,12 @@ function page() {
             })
             .then(res=>res.json())
             .then(data=>{
-                console.log(data)
                 if(data.success){
                     resolve()
+                    setName("")
+                    setDiscription("")
+                    setPrice("")
+                    setImage("")
                 }
                 else reject()
             })
@@ -82,23 +86,26 @@ function page() {
                     <label className='text-gray-500'>Item Name</label>
                     <input
                         className='p-0 m-0'
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                         type="text"
                     />
                     <label className='text-gray-500'>Discription</label>
                     <input
                         className='p-0 m-0'
+                        value={discription}
                         onChange={(e) => setDiscription(e.target.value)}
                         type="text"
                     />
                     <label className='text-gray-500'>Best Price</label>
                     <input
                         className='p-0 m-0'
+                        value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         type="number"
                     />
                     <label className='text-gray-500 block'>Catagory</label>
-                    <select>
+                    <select onChange={(e)=>setCatagory(e.target.value)}>
                         {catagorys.map(cat=>(
                             <option key={cat._id} value={cat.name}>{cat.name}</option>
                         ))}

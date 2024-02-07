@@ -1,14 +1,27 @@
 import Image from 'next/image'
 import React from 'react'
 import Button from './Button'
+import { useAuth } from '@/app/Provider'
 
-function Item() {
+function Item({ item }) {
+  const { user } = useAuth()
+  
+  const addCart = (item) => {
+    fetch("/api/cart", {
+      method: "POST",
+      "content-type": "application/json",
+      body: JSON.stringify({ item, user })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+  }
+
   return (
-    <section className='flex flex-col items-center justify-center  bg-gray-300 p-3 rounded-2xl'>
-        <Image src={"/pizza.png"} width={150} height={150} alt='pizza'></Image>
-        <h1>Veggie Pizza</h1>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam, eaque accusantium illum delectus quaerat labore.</p>
-        <Button title="Add to cart For $12" varient="bg-primary text-white"></Button>
+    <section className='flex text-center flex-col items-center justify-center  bg-gray-300 p-3 rounded-2xl'>
+      <img src={item?.image} alt='pizza' />
+      <h1 className='my-1 font-bold text-2xl text-primary'>{item?.name}</h1>
+      <p className='my-2'>{item?.discription}</p>
+      <Button onClick={() => addCart(item)} title={`Add to cart For $${item?.price}`} varient="bg-primary text-white"></Button>
     </section>
   )
 }

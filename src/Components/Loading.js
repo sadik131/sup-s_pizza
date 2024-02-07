@@ -2,7 +2,7 @@ import React from 'react'
 
 function Loading() {
   return (
-    <div>Loading...</div>
+    <div className='text-5xl mx-auto my-4'>Loading...</div>
   )
 }
 

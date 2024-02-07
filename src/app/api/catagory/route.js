@@ -33,7 +33,6 @@ export async function GET(req) {
 
 export async function DELETE(req) {
     const { id } = await req.json()
-    console.log(id)
     await connectMongoDB()
     try {
         const result = await Catagory.deleteOne({ _id: id })

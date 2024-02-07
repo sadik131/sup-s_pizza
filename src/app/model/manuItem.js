@@ -17,8 +17,12 @@ const MenuSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
+    catagory: {
+        type: String,
+        require: true
+    }
 
-    
+
 }, { timestamps: true })
 
 const MenuItem = mongoose?.models?.menuItem || mongoose.model("menuItem", MenuSchema)

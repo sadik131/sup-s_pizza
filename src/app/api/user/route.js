@@ -1,13 +1,14 @@
 import User from "@/app/model/userModel"
+import { NextResponse } from "next/server"
+import { connectMongoDB } from "../../../../lip/mongodb"
 
 // GET ALL THE USER
-export async function GET(req) {
+export async function GET() {
+    
     try {
         await connectMongoDB()
         const users = await User.find({})
-        const session = await getServerSession(authOptions)
-        console.log(session)
-        return NextResponse.json({ users })
+        return NextResponse.json(users)
     } catch (error) {
         console.log(error)
     }

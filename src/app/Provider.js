@@ -9,9 +9,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const AuthWrapper = () => {
-        const {data , status } = useSession();
-        const[user, setUser] = useState({})
-        const [loading,setLoading] = useState(false)
+        const { data, status } = useSession();
+        const [order, setOrder] = useState([])
+        const [user, setUser] = useState({})
+        const [loading, setLoading] = useState(true)
 
         useEffect(() => {
             setLoading(true)
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
         return (
             <AuthContext.Provider value={{
-                user,loading
+                user, loading, setLoading, order, setOrder
             }}>
                 {children}
             </AuthContext.Provider>

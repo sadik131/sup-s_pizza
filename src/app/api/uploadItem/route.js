@@ -16,3 +16,17 @@ export async function POST(req) {
     console.log(error)
   }
 }
+
+
+// GET ALL PIZZA
+export async function GET(){
+  await connectMongoDB()
+  try {
+    const result = await MenuItem.find({})
+    return NextResponse.json({
+      result
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}

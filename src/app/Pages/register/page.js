@@ -19,37 +19,28 @@ function Register() {
       password: password
     }
     try {
-      if (!email || !password || !name){
+      if (!email || !password || !name) {
         setError("All fields are necessary")
         return
       }
-      
-      // check the user is exist or not
-//       const check = await fetch("http://localhost:3000/api/userExist",{
-//         method:"POST",
-//         headers:{
-//           "Content-type":"application/json"
-//         },
-//         body:JSON.stringify({email})
-//       })
-
-//       const { user } = await check.json();
-// console.log(user)
-
       // register the user
-        const register = await fetch("http://localhost:3000/api/register", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          if (data.status) {
+            route.push("/Pages/login")
+          }
+          setError(data.message)
         })
-      if (register.ok) {
-        setError("")
-        const form = e.target
-        form.reset()
-        route.push("/")
-      }
+
+
     } catch (error) {
       console.log(error, "fontend")
     }
@@ -63,7 +54,7 @@ function Register() {
         <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder='Name' />
         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' />
         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Password' />
-        <input type="submit" className='bg-primary border-none text-white' />
+        <input type="submit" className='!bg-primary border-none text-white' />
         {error && <div className='bg-red-500 text-white font-bold'>{error}</div>}
         <div>
           <h1>or</h1>

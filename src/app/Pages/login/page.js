@@ -38,7 +38,7 @@ function Login() {
       <form onSubmit={handelForm} className='max-w-lg mx-auto text-center'>
         <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' />
         <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Password' />
-        <input type="submit" className='bg-primary cursor-pointer border-none text-white' />
+        <input type="submit" className='!bg-primary cursor-pointer border-none text-white' />
         <div>
           {error && <div className='bg-red-500 text-white font-bold rounded-lg'>{error}</div>}
           <h1>or</h1>

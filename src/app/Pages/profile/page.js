@@ -9,6 +9,7 @@ import { storage } from '@/app/firebase'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/app/Provider'
 import Loading from '@/Components/Loading'
+import InfoInput from '@/Components/InfoInput'
 
 
 function Profile() {
@@ -121,33 +122,18 @@ function Profile() {
         <form action="" onSubmit={handelFormSubmit}>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
           <input type="email" disabled value={email} />
-          <input
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            type="number"
-            placeholder='Phon number' />
-          <input
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            type="text"
-            placeholder='address' />
-          <div className='flex gap-3'>
-            <input
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
-              type="text"
-              placeholder='street' />
-            <input
-              value={post}
-              onChange={(e) => setPost(e.target.value)}
-              type="text"
-              placeholder='postCode' />
-          </div>
-          <input
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            type="text"
-            placeholder='country' />
+          <InfoInput
+            number={number}
+            address={address}
+            street={street}
+            post={post}
+            country={country}
+            setNumber={setNumber}
+            setAddress={setAddress}
+            setStreet={setStreet}
+            setPost={setPost}
+            setCountry={setCountry}
+          ></InfoInput>
           <button type='submit' className='bg-primary block text-center w-full text-white p-1 rounded-xl'>Save</button>
         </form>
       </div>}

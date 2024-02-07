@@ -6,17 +6,19 @@ import React, { useEffect, useState } from 'react'
 function page() {
     const [users, setUsers] = useState([])
 
+
     useEffect(() => {
         getUser()
     }, [])
 
     const getUser = () => {
-        fetch("/api/profile")
+        fetch("/api/user")
             .then(res => res.json())
             .then(data => {
-                setUsers(data.users)
+                setUsers(data)
             })
     }
+    console.log(users)
 
     // make admin page
     const makeAdmin = (id) => {
@@ -33,7 +35,7 @@ function page() {
     }
 
     // delete user
-    const deleteUser = (id) =>{
+    const deleteUser = (id) => {
         fetch("/api/profile", {
             method: "DELETE",
             headers: { "content-type": "application/json" },
@@ -56,7 +58,6 @@ function page() {
             </div>
             <div>
                 {users.map(user => (
-
                     <div className='flex items-center px-4 py-2 rounded-xl justify-between'>
                         <span>{user.name}</span>
                         <span>{user.email}</span>
