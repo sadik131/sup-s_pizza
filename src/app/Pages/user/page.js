@@ -2,6 +2,7 @@
 
 import HeadLink from '@/Components/layout/HeadLink'
 import React, { useEffect, useState } from 'react'
+import Layout from '../dashbord/page'
 
 function page() {
     const [users, setUsers] = useState([])
@@ -49,8 +50,7 @@ function page() {
     }
 
     return (
-        <main className='main-container'>
-            <HeadLink></HeadLink>
+        <Layout className='main-container'>
             <div className='flex bg-gray-300 items-center px-4 py-2 rounded-xl justify-between'>
                 <span>Name</span>
                 <span>Email</span>
@@ -72,7 +72,7 @@ function page() {
                     </div>
                 ))}
             </div>
-        </main>
+        </Layout>
     )
 }
 

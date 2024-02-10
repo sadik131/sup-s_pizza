@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
     await connectMongoDB()
     try {
-        const result = await Cart.find()
+        const result = await Cart.find().populate('customerId')
         return NextResponse.json({
             status: "success",
             result

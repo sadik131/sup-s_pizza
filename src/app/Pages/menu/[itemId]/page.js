@@ -1,21 +1,22 @@
 "use client"
-import { useAuth } from '@/app/Provider';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Layout from '../../dashbord/page';
+import Item from '@/Components/Item';
 
 function Page({ params }) {
-    const {menu} = useAuth()
-    // console.log(params)
+    const [item, setItem] = useState()
 
-    useEffect(()=>{
-        const url =`/api/uploadItem/${params?.itemId}`
+    useEffect(() => {
+        const url = `/api/uploadItem/${params?.itemId}`
         fetch(url)
-        .then(res=>res.json())
-        .then(data=>console.log(data))
-    },[params?.itemId])
+            .then(res => res.json())
+            .then(data => setItem(data.result))
+    }, [params?.itemId])
 
-    // console.log(menu.find(item=>item.id === params?.itemId))
     return (
-        <div>page {params?.itemId}</div>
+        <Layout>
+            <Item item={item} />
+        </Layout>
     );
 }
 

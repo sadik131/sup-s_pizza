@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import React from 'react'
 import Button from './Button'
 import { useAuth } from '@/app/Provider'
@@ -13,7 +12,9 @@ function Item({ item }) {
       body: JSON.stringify({ item, user })
     })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => {
+        alert("add")
+        console.log(data)})
   }
 
   return (

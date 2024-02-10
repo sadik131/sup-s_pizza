@@ -16,6 +16,11 @@ const cartSchema = new mongoose.Schema({
     customerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    status: {
+        type: String,
+        enum: ["pending", "making", "delivery", "cancel"],
+        default: "pending"
     }
 }, { timestamps: true })
 

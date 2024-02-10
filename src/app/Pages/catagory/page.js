@@ -4,6 +4,7 @@ import Edit from '@/icon/Edit'
 import Trash from '@/icon/Trash'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import Layout from '../dashbord/page'
 
 function page() {
     const [name, setName] = useState("")
@@ -100,8 +101,7 @@ function page() {
     }
 
     return (
-        <main className='main-container'>
-            <HeadLink></HeadLink>
+        <Layout className='main-container'>
             {loading && <h1>Loading...</h1>}
             <div>
                 <label>{edit ? `Update catagory name: ${name}` : `New catagory name`}</label>
@@ -125,7 +125,7 @@ function page() {
                     </div>
                 </div>
             ))}
-        </main>
+        </Layout>
     )
 }
 
