@@ -17,7 +17,7 @@ const MenuSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
-    catagory: {
+    selectCat: {
         type: String,
         require: true
     }

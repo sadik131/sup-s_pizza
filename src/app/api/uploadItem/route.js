@@ -6,6 +6,7 @@ import { connectMongoDB } from "../../../../lip/mongodb"
 export async function POST(req) {
   await connectMongoDB()
   const data = await req.json()
+  console.log(data)
   try {
     const result = await MenuItem.create(data)
     return NextResponse.json({

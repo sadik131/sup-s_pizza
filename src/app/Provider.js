@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 
         useEffect(() => {
             setLoading(true)
+            setUser(null)
             fetch('/api/profile')
                 .then(res => res.json())
                 .then(data => {
